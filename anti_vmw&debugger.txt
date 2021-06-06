@@ -1,0 +1,23 @@
+xor eax,eax
+mov eax,0x40000000
+cpuid
+cmp    ecx,0x4d566572
+je L
+push ss
+pop ss
+pushf
+test byte ptr [esp+1], 1
+jnz L
+popf
+jmp popup
+popf
+L:
+mov    eax,0x4094e4
+call   eax
+popup:
+//shellcode
+\x31\xC0\xB8\x00\x00\x00\x40\x0F\xA2\x81\xF9\x72\x65\x56\x4D\x74\x0E\x16\x17\x9C\xF6\x44\x24\x01\x01\x75\x03\x9D\xEB\x08\x9D\xB8
+////////////////
+Link tham khao:
+https://rayanfam.com/topics/defeating-malware-anti-vm-techniques-cpuid-based-instructions/
+https://anti-debug.checkpoint.com/techniques/assembly.html
