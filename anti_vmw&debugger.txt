@@ -1,0 +1,64 @@
+Link Github:https://github.com/HacMieu89/anti_vmw
+############cach 1###############
+xor eax,eax
+mov eax,0x40000000
+cpuid
+cmp    ecx,0x4d566572
+je L
+push ss
+pop ss
+pushf
+test byte ptr [esp+1], 1
+jnz L
+popf
+jmp popup
+popf
+L:
+mov    eax,0x4094e4
+call   eax
+popup:
+//shellcode
+\x31\xC0\xB8\x00\x00\x00\x40\x0F\xA2\x81\xF9\x72\x65\x56\x4D\x74\x0E\x16\x17\x9C\xF6\x44\x24\x01\x01\x75\x03\x9D\xEB\x08\x9D\xB8
+
+############cach 2#####################
+
+//anti debug using  PEB.NtGlobalFlag
+//anti vmw using HEAP flag
+mov ebx,[fs:0x30] 
+mov ecx,[ebx+0x68]
+cmp ecx,0
+jne debugger_found
+MOV EAX, FS:[0x30];
+MOV EAX, [EAX + 0x18];
+MOV EAX, [EAX + 0x0c];
+cmp eax,0x2
+je popup
+debugger_found:
+mov    eax,0x4094e4
+call   eax
+popup:
+///shellcode
+\x64\x8B\x1D\x30\x00\x00\x00\x8B\x4B\x68\x83\xF9\x00\x75\x11\x64\xA1\x30\x00\x00\x00\x8B\x40\x18\x8B\x40\x0C\x83\xF8\x02\x74\x07\xB8
+///
+#########cach 3#########
+//anti debug
+rdtsc
+mov ecx,eax
+mov ebx,edx
+rdtsc
+cmp edx,ebx
+ja debugger_found
+sub eax,ecx
+cmp eax,0x200
+ja debugger_found
+jmp popup
+debugger_found:
+mov    eax,0x4094e4
+call   eax
+popup:
+////////////////
+Link tham khao:
+https://rayanfam.com/topics/defeating-malware-anti-vm-techniques-cpuid-based-instructions/
+https://anti-debug.checkpoint.com/techniques/assembly.html
+https://resources.infosecinstitute.com/topic/anti-debugging-and-anti-vm-techniques-and-anti-emulation/
+http://www.cs.utah.edu/~aburtsev/malw-sem/slides/02-anti-debugging.pdf
