@@ -27,18 +27,19 @@ popup:
 mov ebx,[fs:0x30] 
 mov ecx,[ebx+0x68]
 cmp ecx,0
-jne debugger_found
-MOV EAX, FS:[0x30];
-MOV EAX, [EAX + 0x18];
-MOV EAX, [EAX + 0x0c];
-cmp eax,0x2
-je popup
-debugger_found:
+jne anti
+xor eax,eax
+inc eax
+cpuid
+bt ecx,0x1f
+jb anti
+jmp popup
+anti:
 mov    eax,0x4094e4
 call   eax
 popup:
 ///shellcode
-\x64\x8B\x1D\x30\x00\x00\x00\x8B\x4B\x68\x83\xF9\x00\x75\x11\x64\xA1\x30\x00\x00\x00\x8B\x40\x18\x8B\x40\x0C\x83\xF8\x02\x74\x07\xB8
+\x64\x8B\x1D\x30\x00\x00\x00\x8B\x4B\x68\x83\xF9\x00\x75\x0D\x31\xC0\x40\x0F\xA2\x0F\xBA\xE1\x1F\x72\x02\xEB\x07\xB8
 ///
 #########cach 3#########
 //anti debug
