@@ -23,7 +23,7 @@ popup:
 ############cach 2#####################
 
 //anti debug using  PEB.NtGlobalFlag
-//anti vmw using HEAP flag
+//anti vmw using CPUID – Hypervisor presence
 mov ebx,[fs:0x30] 
 mov ecx,[ebx+0x68]
 cmp ecx,0
